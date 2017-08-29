@@ -43,7 +43,7 @@ namespace TriangleDeterminator.Tests
             Assert.AreEqual(TriangleType.Equilateral, floatType);
 
             // int, double, float
-            Assert.ThrowsException<ArgumentException>(() => new Triangle(int.MaxValue, double.MaxValue, float.MaxValue)); // Due to the triangle rule
+            Assert.ThrowsException<TriangleDimensionException>(() => new Triangle(int.MaxValue, double.MaxValue, float.MaxValue)); // Due to the triangle rule
         }
 
         [Test]
@@ -58,13 +58,13 @@ namespace TriangleDeterminator.Tests
         [Test]
         public void InvalidDimensionsTests()
         {
-            Assert.ThrowsException<ArgumentException>(() => { new Triangle(1, 1, 10); });
+            Assert.ThrowsException<TriangleDimensionException>(() => { new Triangle(1, 1, 10); });
         }
 
         [Test]
         public void NegativeTests()
         {
-            Assert.ThrowsException<ArgumentException>(() => TriangleHelper.DetermineType(new Triangle(-1, -1, -1)));
+            Assert.ThrowsException<TriangleNegativParameterException>(() => TriangleHelper.DetermineType(new Triangle(-1, -1, -1)));
         }
 
         [Test]
@@ -126,12 +126,18 @@ namespace TriangleDeterminator.Tests
             var scalenes = new List<Triangle>();
             while (true)
             {
-                var a = GetRandomDouble();
-                var b = GetRandomDouble();
-                var c = GetRandomDouble();
+                var sides = new List<double>();
+
+                while (sides.Count < 3)
+                {
+                    var randomDouble = GetRandomDouble();
+                    if (!sides.Contains(randomDouble))
+                        sides.Add(randomDouble);
+                }
+
                 try
                 {
-                    var triangle = new Triangle(a, b, c);
+                    var triangle = new Triangle(sides.ToArray());
                     if (!scalenes.Contains(triangle))
                         scalenes.Add(triangle);
                     // Base case

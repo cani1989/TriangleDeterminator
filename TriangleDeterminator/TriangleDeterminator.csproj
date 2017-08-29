@@ -46,7 +46,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Triangle.cs" />
+    <Compile Include="Exceptions\TriangleDimensionException.cs" />
     <Compile Include="TriangleHelper.cs" />
+    <Compile Include="Exceptions\TriangleNegativParameterException.cs" />
     <Compile Include="TriangleType.cs" />
   </ItemGroup>
   <ItemGroup>

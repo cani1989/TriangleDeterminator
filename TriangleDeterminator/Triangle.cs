@@ -34,10 +34,10 @@ namespace TriangleDeterminator
         public void Validate()
         {
             if (AsArray.Any(t => t <= 0))
-                throw new ArgumentException("A triangle cannot have a side with zero or negative length!");
+                throw new TriangleNegativParameterException();
 
             if (Area == Double.NaN)
-                throw new IndexOutOfRangeException("One side has to many decimals to calculate area");
+                throw new IndexOutOfRangeException("One side has to many digits to calculate area");
 
             // A prerequisite for a triangle is that the total length of the two smallest sides are longer than the longest side. 
             var array = AsArray.ToList();
@@ -46,7 +46,7 @@ namespace TriangleDeterminator
             var shorterSides = array.Sum();
             if (shorterSides < longestSide)
             {
-                throw new ArgumentException("A prerequisite for a triangle is that the total length of the two smallest sides are longer than the longest side!");
+                throw new TriangleDimensionException();
             }
         }
 
