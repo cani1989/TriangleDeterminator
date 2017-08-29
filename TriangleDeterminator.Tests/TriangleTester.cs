@@ -13,6 +13,7 @@ namespace TriangleDeterminator.Tests
         private List<Triangle> _scalenes;
         private List<Triangle> _isosceles;
         private List<Triangle> _equilaterals;
+        private static readonly Random Random = new Random();
 
         [SetUp]
         public void CreateData()
@@ -23,13 +24,41 @@ namespace TriangleDeterminator.Tests
         }
 
         [Test]
+        public void TestMaxValues()
+        {
+            // double
+            var triangle = new Triangle(double.MaxValue, double.MaxValue, double.MaxValue);
+            var type = TriangleHelper.DetermineType(triangle);
+            Assert.AreEqual(TriangleType.Equilateral, type);
+            Assert.IsTrue(double.IsInfinity(triangle.Area)); // We simply don't want to calculate numbers this large anyways.
+
+            // int
+            var intTriangle = new Triangle(int.MaxValue, int.MaxValue, int.MaxValue);
+            var intType = TriangleHelper.DetermineType(intTriangle);
+            Assert.AreEqual(TriangleType.Equilateral, intType);
+
+            // float
+            var floatTriangle = new Triangle(float.MaxValue, float.MaxValue, float.MaxValue);
+            var floatType = TriangleHelper.DetermineType(floatTriangle);
+            Assert.AreEqual(TriangleType.Equilateral, floatType);
+
+            // int, double, float
+            Assert.ThrowsException<ArgumentException>(() => new Triangle(int.MaxValue, double.MaxValue, float.MaxValue)); // Due to the triangle rule
+        }
+
+        [Test]
         public void TestsEquilaterals()
         {
             foreach (var triangle in _equilaterals)
             {
                 var type = TriangleHelper.DetermineType(triangle);
-                Assert.AreEqual(type, TriangleType.Equilateral);
+                Assert.AreEqual(TriangleType.Equilateral, type);
             }
+        }
+        [Test]
+        public void InvalidDimensionsTests()
+        {
+            Assert.ThrowsException<ArgumentException>(() => { new Triangle(1, 1, 10); });
         }
 
         [Test]
@@ -44,7 +73,7 @@ namespace TriangleDeterminator.Tests
             foreach (var triangle in _isosceles)
             {
                 var type = TriangleHelper.DetermineType(triangle);
-                Assert.AreEqual(type, TriangleType.Isosceles);
+                Assert.AreEqual(TriangleType.Isosceles, type);
             }
         }
 
@@ -54,37 +83,68 @@ namespace TriangleDeterminator.Tests
             foreach (var triangle in _scalenes)
             {
                 var type = TriangleHelper.DetermineType(triangle);
-                Assert.AreEqual(type, TriangleType.Scalene);
+                Assert.AreEqual(TriangleType.Scalene, type);
             }
         }
 
         private static List<Triangle> GenerateTestEquilaterals()
         {
-            return Enumerable.Range(1, 10).Select(t => new Triangle(t, t, t)).ToList();
+            return Enumerable.Range(1, 100).Select(t => (double)t).Select(t => new Triangle(t / 10.0, t / 10.0, t / 10.0)).ToList();
         }
 
+        /// <summary>
+        /// Generates 20 triangles where 2 sides are similar and one is different
+        /// </summary>
+        /// <returns></returns>
         private static List<Triangle> GenerateTestIsosceles()
         {
-            const int fixedSide = 4;
-            return Enumerable.Range(1, 10).Where(t => t != fixedSide).Select(t => new Triangle(t, t, fixedSide)).ToList();
+            var isosceles = new List<Triangle>();
+            while (true)
+            {
+                var a = GetRandomDouble();
+                var b = a;
+                while (b == a)
+                    b = GetRandomDouble();
+                try
+                {
+                    var triangle = new Triangle(a, b, b);
+                    if (!isosceles.Contains(triangle))
+                        isosceles.Add(triangle);
+                    // Base case
+                    if (isosceles.Count >= 20)
+                        return isosceles;
+                }
+                catch (Exception e)
+                {
+                    // We expect some triangle not to follow constraints
+                }
+            }
         }
 
         private static List<Triangle> GenerateTestScalenes()
         {
-            var random = new Random();
             var scalenes = new List<Triangle>();
             while (true)
             {
-                var a = random.Next(1, 10);
-                var b = a + random.Next(1, 10);
-                var c = b + random.Next(1, 10);
-                var triangle = new Triangle(a, b, c);
-                if (!scalenes.Contains(triangle))
-                    scalenes.Add(triangle);
-
-                if (scalenes.Count >= 10)
-                    return scalenes;
+                var a = GetRandomDouble();
+                var b = GetRandomDouble();
+                var c = GetRandomDouble();
+                try
+                {
+                    var triangle = new Triangle(a, b, c);
+                    if (!scalenes.Contains(triangle))
+                        scalenes.Add(triangle);
+                    // Base case
+                    if (scalenes.Count >= 20)
+                        return scalenes;
+                }
+                catch (Exception e)
+                {
+                    // We expect some triangle not to follow constraints
+                }
             }
         }
+
+        private static double GetRandomDouble() => Math.Round(Random.NextDouble() * 10.0, TriangleHelper.Decimals);
     }
 }
