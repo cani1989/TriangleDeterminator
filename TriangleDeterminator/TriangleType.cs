@@ -6,5 +6,6 @@ namespace TriangleDeterminator
         Isosceles, // 2 sides similar
         Equilateral, // all sides similar
         NotFound
+      
     }
 }

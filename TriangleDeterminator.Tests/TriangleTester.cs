@@ -1,18 +1,20 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace TriangleDeterminator.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TriangleTester
     {
         private List<Triangle> _scalenes;
         private List<Triangle> _isosceles;
         private List<Triangle> _equilaterals;
 
-        [TestInitialize]
+        [SetUp]
         public void CreateData()
         {
             _equilaterals = GenerateTestEquilaterals();
@@ -20,43 +22,39 @@ namespace TriangleDeterminator.Tests
             _scalenes = GenerateTestScalenes();
         }
 
-        [TestMethod]
-        public void PositiveTestsEquilaterals()
+        [Test]
+        public void TestsEquilaterals()
         {
             foreach (var triangle in _equilaterals)
             {
-                var type = TriangleWizard.DetermineType(triangle);
-                Assert.Equals(type, TriangleType.Equilateral);
+                var type = TriangleHelper.DetermineType(triangle);
+                Assert.AreEqual(type, TriangleType.Equilateral);
             }
         }
 
-        [TestMethod]
-        public void NegativeTestsEquilaterals()
+        [Test]
+        public void NegativeTests()
         {
-            foreach (var triangle in _equilaterals)
-            {
-                var type = TriangleWizard.DetermineType(triangle);
-                Assert.Equals(type, TriangleType.Equilateral);
-            }
+            Assert.ThrowsException<ArgumentException>(() => TriangleHelper.DetermineType(new Triangle(-1, -1, -1)));
         }
 
-        [TestMethod]
+        [Test]
         public void TestIsosceles()
         {
             foreach (var triangle in _isosceles)
             {
-                var type = TriangleWizard.DetermineType(triangle);
-                Assert.Equals(type, TriangleType.Isosceles);
+                var type = TriangleHelper.DetermineType(triangle);
+                Assert.AreEqual(type, TriangleType.Isosceles);
             }
         }
 
-        [TestMethod]
-        public void TestEqualsScalenes()
+        [Test]
+        public void TestScalenes()
         {
             foreach (var triangle in _scalenes)
             {
-                var type = TriangleWizard.DetermineType(triangle);
-                Assert.Equals(type, TriangleType.Scalene);
+                var type = TriangleHelper.DetermineType(triangle);
+                Assert.AreEqual(type, TriangleType.Scalene);
             }
         }
 
@@ -81,10 +79,10 @@ namespace TriangleDeterminator.Tests
                 var b = a + random.Next(1, 10);
                 var c = b + random.Next(1, 10);
                 var triangle = new Triangle(a, b, c);
-                if (scalenes.Contains(triangle))
+                if (!scalenes.Contains(triangle))
                     scalenes.Add(triangle);
 
-                if (scalenes.Count == 10)
+                if (scalenes.Count >= 10)
                     return scalenes;
             }
         }
