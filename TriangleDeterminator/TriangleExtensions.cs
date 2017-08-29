@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace TriangleDeterminator
 {
-    public static class TriangleHelper
+    public static class TriangleExtensions
     {
         public const int Decimals = 2;
 
@@ -52,5 +52,23 @@ namespace TriangleDeterminator
             return Math.Round(sqrt, Decimals);
         }
 
+        public static void Validate(this Triangle triangle)
+        {
+            if (triangle.AsArray.Any(t => t <= 0))
+                throw new TriangleNegativParameterException();
+
+            if (triangle.Area == Double.NaN)
+                throw new IndexOutOfRangeException("One side has to many digits to calculate area");
+
+            // A prerequisite for a triangle is that the total length of the two smallest sides are longer than the longest side.
+            var array = triangle.AsArray.ToList();
+            var longestSide = array.Max();
+            array.RemoveAt(array.IndexOf(longestSide));
+            var shorterSides = array.Sum();
+            if (shorterSides < longestSide)
+            {
+                throw new TriangleDimensionException();
+            }
+        }
     }
 }

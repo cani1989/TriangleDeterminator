@@ -1,8 +1,7 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NUnit.Framework;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace TriangleDeterminator.Tests
@@ -28,18 +27,18 @@ namespace TriangleDeterminator.Tests
         {
             // double
             var triangle = new Triangle(double.MaxValue, double.MaxValue, double.MaxValue);
-            var type = TriangleHelper.DetermineType(triangle);
+            var type = TriangleExtensions.DetermineType(triangle);
             Assert.AreEqual(TriangleType.Equilateral, type);
             Assert.IsTrue(double.IsInfinity(triangle.Area)); // We simply don't want to calculate numbers this large anyways.
 
             // int
             var intTriangle = new Triangle(int.MaxValue, int.MaxValue, int.MaxValue);
-            var intType = TriangleHelper.DetermineType(intTriangle);
+            var intType = TriangleExtensions.DetermineType(intTriangle);
             Assert.AreEqual(TriangleType.Equilateral, intType);
 
             // float
             var floatTriangle = new Triangle(float.MaxValue, float.MaxValue, float.MaxValue);
-            var floatType = TriangleHelper.DetermineType(floatTriangle);
+            var floatType = TriangleExtensions.DetermineType(floatTriangle);
             Assert.AreEqual(TriangleType.Equilateral, floatType);
 
             // int, double, float
@@ -51,10 +50,11 @@ namespace TriangleDeterminator.Tests
         {
             foreach (var triangle in _equilaterals)
             {
-                var type = TriangleHelper.DetermineType(triangle);
+                var type = TriangleExtensions.DetermineType(triangle);
                 Assert.AreEqual(TriangleType.Equilateral, type);
             }
         }
+
         [Test]
         public void InvalidDimensionsTests()
         {
@@ -64,7 +64,7 @@ namespace TriangleDeterminator.Tests
         [Test]
         public void NegativeTests()
         {
-            Assert.ThrowsException<TriangleNegativParameterException>(() => TriangleHelper.DetermineType(new Triangle(-1, -1, -1)));
+            Assert.ThrowsException<TriangleNegativParameterException>(() => TriangleExtensions.DetermineType(new Triangle(-1, -1, -1)));
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace TriangleDeterminator.Tests
         {
             foreach (var triangle in _isosceles)
             {
-                var type = TriangleHelper.DetermineType(triangle);
+                var type = TriangleExtensions.DetermineType(triangle);
                 Assert.AreEqual(TriangleType.Isosceles, type);
             }
         }
@@ -82,7 +82,7 @@ namespace TriangleDeterminator.Tests
         {
             foreach (var triangle in _scalenes)
             {
-                var type = TriangleHelper.DetermineType(triangle);
+                var type = TriangleExtensions.DetermineType(triangle);
                 Assert.AreEqual(TriangleType.Scalene, type);
             }
         }
@@ -151,6 +151,6 @@ namespace TriangleDeterminator.Tests
             }
         }
 
-        private static double GetRandomDouble() => Math.Round(Random.NextDouble() * 10.0, TriangleHelper.Decimals);
+        private static double GetRandomDouble() => Math.Round(Random.NextDouble() * 10.0, TriangleExtensions.Decimals);
     }
 }

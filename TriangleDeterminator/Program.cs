@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace TriangleDeterminator
 {
@@ -48,7 +47,7 @@ namespace TriangleDeterminator
             {
                 var triangle = new Triangle(entries.ToArray());
                 Console.WriteLine("Area size: " + triangle.Area);
-                var type = TriangleHelper.DetermineType(triangle.A, triangle.B, triangle.C);
+                var type = TriangleExtensions.DetermineType(triangle.A, triangle.B, triangle.C);
                 Console.WriteLine("Triangle type: " + type);
                 Console.WriteLine("Program completed. Press any key to exit.");
                 Console.ReadLine();
