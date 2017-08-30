@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TriangleDeterminator
 {
@@ -12,6 +13,35 @@ namespace TriangleDeterminator
             Console.WriteLine("Please write 3 numbers; one for each side of a triangle. Type 'Exit' to quit.");
             Console.WriteLine();
 
+            var entries = GetEntriesFromUser();
+            if (!entries.Any())
+                return;
+            DisplayTriangleStatus(entries);
+        }
+
+        private static void DisplayTriangleStatus(List<double> entries)
+        {
+            Console.WriteLine();
+            try
+            {
+                var triangle = new Triangle(entries.ToArray());
+                Console.WriteLine("Area size: " + triangle.Area);
+                var type = TriangleExtensions.DetermineType(triangle.A, triangle.B, triangle.C);
+                Console.WriteLine("Triangle type: " + type);
+                Console.WriteLine("Program completed. Press any key to exit.");
+                Console.ReadLine();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine();
+                Console.WriteLine("Please re-try by running the program agian. Press any key to exit.");
+                Console.ReadLine();
+            }
+        }
+
+        private static List<double> GetEntriesFromUser()
+        {
             var entries = new List<double>();
             while (entries.Count < 3)
             {
@@ -22,7 +52,7 @@ namespace TriangleDeterminator
                 {
                     Console.WriteLine("PROGRAM TERMINATED. Press any key to exit.");
                     Console.ReadLine();
-                    return;
+                    break;
                 }
 
                 double result;
@@ -42,23 +72,7 @@ namespace TriangleDeterminator
                     Console.WriteLine("Input was Not-a-Number! Please retry or type exit.");
                 }
             }
-            Console.WriteLine();
-            try
-            {
-                var triangle = new Triangle(entries.ToArray());
-                Console.WriteLine("Area size: " + triangle.Area);
-                var type = TriangleExtensions.DetermineType(triangle.A, triangle.B, triangle.C);
-                Console.WriteLine("Triangle type: " + type);
-                Console.WriteLine("Program completed. Press any key to exit.");
-                Console.ReadLine();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                Console.WriteLine();
-                Console.WriteLine("Please re-try by running the program agian. Press any key to exit.");
-                Console.ReadLine();
-            }
+            return entries;
         }
     }
 }

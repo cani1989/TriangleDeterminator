@@ -54,6 +54,9 @@ namespace TriangleDeterminator
 
         public static void Validate(this Triangle triangle)
         {
+            if (triangle.AsArray.Count() != 3)
+                throw new ArgumentException($"Input array is of wrong length! Contents is [{string.Join(", ", triangle.AsArray)}]");
+
             if (triangle.AsArray.Any(t => t <= 0))
                 throw new TriangleNegativParameterException();
 
