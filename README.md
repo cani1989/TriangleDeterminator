@@ -11,4 +11,4 @@ Finally, a `NUnit` test project has been added, which ensures the core logic fun
 
 Run the `.exe` file and follow instructions. 
 
-![alt text](https://github.com/cani1989/TriangleDeterminator/master/demo.gif)
+![Demo](https://raw.githubusercontent.com/cani1989/TriangleDeterminator/master/demo.gif)
