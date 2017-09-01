@@ -64,53 +64,36 @@ namespace TriangleDeterminator
 
         private static bool CheckNaN(string entry, out double result)
         {
-            if (!double.TryParse(entry, out result))
-            {
-                Console.WriteLine("Input was not valid number! Please retry or type exit.");
-                return true;
-            }
-            return false;
+            var res = !double.TryParse(entry, out result);
+            return ConditionCheck(() => res, "Input was not valid number! Please retry or type exit.");
         }
 
         private static bool CheckNegative(double result)
         {
-            if (result < 0)
-            {
-                Console.WriteLine("You cannot have a negative number as input! Try again.");
-                return true;
-            }
-            return false;
+            return ConditionCheck(() => result < 0, "You cannot have a negative number as input! Try again.");
         }
 
         private static bool CheckZero(double result)
         {
-            if (result == 0)
-            {
-                Console.WriteLine("You cannot have zero as input! Try again.");
-                return true;
-            }
-            return false;
+            return ConditionCheck(() => result == 0, "You cannot have zero as input! Try again.");
         }
 
         private static bool CheckExit(string entry)
         {
-            if (entry.ToLower().Trim() == "exit")
-            {
-                Console.WriteLine("PROGRAM TERMINATED. Press any key to exit.");
-                Console.ReadLine();
-                return true;
-            }
-            return false;
+            return ConditionCheck(() => entry.ToLower().Trim() == "exit", "PROGRAM TERMINATED. Press any key to exit.");
+        }
+
+        private static bool ConditionCheck(Func<bool> condition, string msg = null)
+        {
+            var result = condition.Invoke();
+            if (result && !string.IsNullOrWhiteSpace(msg))
+                Console.WriteLine(msg);
+            return result;
         }
 
         private static bool CheckEmpty(string entry)
         {
-            if (string.IsNullOrWhiteSpace(entry))
-            {
-                Console.WriteLine("Please type a number! Try again.");
-                return true;
-            }
-            return false;
+            return ConditionCheck(() => string.IsNullOrWhiteSpace(entry), "Please type a number! Try again.");
         }
     }
 }
