@@ -58,9 +58,9 @@ namespace TriangleDeterminator
                 double result;
                 if (double.TryParse(entry, out result))
                 {
-                    if (result < 0)
+                    if (result < 1)
                     {
-                        Console.WriteLine("You cannot use a negative number! Please retry.");
+                        Console.WriteLine("You cannot use a negative number or zero! Please retry.");
                         continue;
                     }
 
