@@ -55,8 +55,7 @@ namespace TriangleDeterminator
                     break;
                 }
 
-                double result;
-                if (double.TryParse(entry, out result))
+                if (double.TryParse(entry, out var result))
                 {
                     if (result < 1)
                     {
