@@ -64,8 +64,10 @@ namespace TriangleDeterminator
 
         private static bool CheckNaN(string entry, out double result)
         {
-            var res = !double.TryParse(entry, out result);
-            return ConditionCheck(() => res, "Input was not valid number! Please retry or type exit.");
+            if (entry.Contains('.'))
+                entry = entry.Replace('.', ',');
+            var res = double.TryParse(entry, out result);
+            return ConditionCheck(() => !res, "Input was not valid number! Please retry or type exit.");
         }
 
         private static bool CheckNegative(double result)
