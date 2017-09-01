@@ -68,7 +68,7 @@ namespace TriangleDeterminator
             var longestSide = array.Max();
             array.RemoveAt(array.IndexOf(longestSide));
             var shorterSides = array.Sum();
-            if (shorterSides < longestSide)
+            if (Math.Round(shorterSides, 2) < Math.Round(longestSide, 2))
             {
                 throw new TriangleDimensionException();
             }

@@ -20,6 +20,12 @@ namespace TriangleDeterminator.Tests
         }
 
         [Test]
+        public void TestEdgeVase()
+        {
+            Assert.ThrowsException<TriangleDimensionException>(() => new Triangle(2, 3, 5));
+        }
+
+        [Test]
         public void TestMaxValues()
         {
             // double
